@@ -3,104 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Script Converter Tool - Fixed</title>
+    <title>Ad Script Converter Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .glass-panel { background: white; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        textarea { font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 0.875rem; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass-panel {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+        textarea {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center py-12 px-4 text-slate-800">
 
-    <div class="text-center mb-10">
-        <h1 class="text-3xl font-bold text-slate-900 mb-2">
-            <i class="fa-solid fa-code-branch text-indigo-600 mr-2"></i>HTML Tools Converter
-        </h1>
-        <p class="text-slate-500">Konversi script ke format document.write() secara instan.</p>
-    </div>
+<div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-slate-900 mb-2">
+        <i class="fa-solid fa-code-branch text-indigo-600 mr-2"></i>HTML Tools Converter
+    </h1>
+    <p class="text-slate-500">Ubah script iklan HTML menjadi document.write()</p>
+</div>
 
-    <div class="w-full max-w-4xl grid gap-6">
-        <div class="glass-panel rounded-xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <label class="text-sm font-semibold text-slate-700 uppercase">Input Script</label>
-                <button onclick="resetFields()" class="text-xs text-red-500 hover:underline">Reset</button>
-            </div>
-            <textarea id="inputScript" class="w-full h-48 p-4 bg-slate-50 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Paste script di sini..."></textarea>
-        </div>
+<div class="w-full max-w-4xl grid gap-6">
 
-        <div class="flex justify-center">
-            <button onclick="convertScript()" class="px-8 py-3 text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-transform active:scale-95">
-                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Convert Script
+    <div class="glass-panel rounded-xl p-6">
+        <div class="flex justify-between items-center mb-4">
+            <label class="text-sm font-semibold uppercase">Input Script</label>
+            <button onclick="resetFields()" class="text-xs text-red-500">
+                <i class="fa-solid fa-trash-can"></i> Reset
             </button>
         </div>
-
-        <div class="glass-panel rounded-xl p-6 border-t-4 border-t-indigo-500">
-            <div class="flex justify-between items-center mb-4">
-                <label class="text-sm font-semibold text-slate-700 uppercase">Hasil Convert</label>
-                <span id="copyFeedback" class="text-xs text-green-600 opacity-0 transition-opacity">Tersalin!</span>
-            </div>
-            <div class="relative">
-                <textarea id="outputScript" readonly class="w-full h-48 p-4 bg-slate-900 text-green-400 border rounded-lg outline-none"></textarea>
-                <button onclick="copyToClipboard()" class="absolute top-3 right-3 bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-md transition-all">
-                    <i class="fa-regular fa-copy"></i>
-                </button>
-            </div>
-        </div>
+        <textarea id="inputScript" class="w-full h-48 p-4 border rounded-lg"
+            placeholder="<script src='https://example.com/file.js'></script>"></textarea>
     </div>
 
-    <script>
-        function convertScript() {
-            const input = document.getElementById('inputScript').value.trim();
-            const outputArea = document.getElementById('outputScript');
+    <div class="flex justify-center">
+        <button onclick="convertScript()" class="px-8 py-3 bg-indigo-600 text-white rounded-full">
+            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Convert
+        </button>
+    </div>
 
-            if (!input) {
-                alert("Masukkan script terlebih dahulu!");
-                return;
-            }
+    <div class="glass-panel rounded-xl p-6">
+        <label class="text-sm font-semibold uppercase mb-2 block">Hasil Convert</label>
+        <textarea id="outputScript" readonly
+            class="w-full h-48 p-4 bg-slate-900 text-green-400 border rounded-lg"></textarea>
+    </div>
 
-            let processed = input;
+</div>
 
-            // 1. Ubah https:// menjadi //
-            processed = processed.replace(/https:\/\//g, '//');
+<script>
+function convertScript() {
+    const input = document.getElementById('inputScript').value.trim();
+    const output = document.getElementById('outputScript');
 
-            // 2. Tambahkan type='text/javascript' jika belum ada (khusus untuk tag script dengan src)
-            if (processed.includes('src=') && !processed.toLowerCase().includes('type=')) {
-                processed = processed.replace(/<script/i, '<script type="text/javascript"');
-            }
+    if (!input) {
+        alert("Masukkan script terlebih dahulu");
+        return;
+    }
 
-            // 3. Escape closing script tag </script> -> <\/script>
-            processed = processed.replace(/<\/script>/gi, '<\\/script>');
+    let result = '';
 
-            // 4. Proses Akhir berdasarkan baris
-            let result = '';
-            if (input.includes('\n')) {
-                // Multi-line menggunakan backticks (`)
-                result = "document.write(`" + processed + "`);";
-            } else {
-                // Single-line sesuai permintaan: Gunakan double quote (") di luar, single quote (') di dalam
-                let cleanContent = processed.replace(/"/g, "'");
-                result = `document.write("${cleanContent}");`;
-            }
+    // === MODE MULTILINE (TIDAK DIUBAH) ===
+    if (input.includes('\n')) {
+        let processed = input
+            .replace(/src=["']https:\/\//gi, 'src="//')
+            .replace(/<\/script>/gi, '<\\/script>');
 
-            outputArea.value = result;
+        result = `document.write(\`\n${processed}\n\`);`;
+    }
+
+    // === MODE SINGLE LINE (SCRIPT SRC KHUSUS) ===
+    else {
+        const match = input.match(/<script\s+src=["']([^"']+)["']\s*><\/script>/i);
+
+        if (match) {
+            let src = match[1].replace(/^https:\/\//, '//');
+
+            result =
+                `document.write("<script src='${src}' type='text/javascript'><\\/script>");`;
+        } else {
+            // fallback aman
+            let processed = input
+                .replace(/https:\/\//g, '//')
+                .replace(/<\/script>/gi, '<\\/script>')
+                .replace(/"/g, "'");
+
+            result = `document.write("${processed}");`;
         }
+    }
 
-        function copyToClipboard() {
-            const outputArea = document.getElementById('outputScript');
-            if (!outputArea.value) return;
-            navigator.clipboard.writeText(outputArea.value);
-            const feedback = document.getElementById('copyFeedback');
-            feedback.classList.remove('opacity-0');
-            setTimeout(() => feedback.classList.add('opacity-0'), 2000);
-        }
+    output.value = result;
+}
 
-        function resetFields() {
-            document.getElementById('inputScript').value = '';
-            document.getElementById('outputScript').value = '';
-        }
-    </script>
+function resetFields() {
+    document.getElementById('inputScript').value = '';
+    document.getElementById('outputScript').value = '';
+}
+</script>
+
 </body>
 </html>
