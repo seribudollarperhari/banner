@@ -3,86 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Script Converter Tool</title>
+    <title>Ad Script Converter Tool - Fixed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        .glass-panel {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e2e8f0;
-        }
-        textarea {
-            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-            font-size: 0.875rem;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-panel { background: white; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        textarea { font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 0.875rem; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 text-slate-800">
+<body class="min-h-screen flex flex-col items-center py-12 px-4 text-slate-800">
 
     <div class="text-center mb-10">
         <h1 class="text-3xl font-bold text-slate-900 mb-2">
             <i class="fa-solid fa-code-branch text-indigo-600 mr-2"></i>HTML Tools Converter
         </h1>
-        <p class="text-slate-500">Ubah script iklan HTML menjadi format document.write() dengan aman.</p>
+        <p class="text-slate-500">Konversi script ke format document.write() secara instan.</p>
     </div>
 
     <div class="w-full max-w-4xl grid gap-6">
-
         <div class="glass-panel rounded-xl p-6">
             <div class="flex justify-between items-center mb-4">
-                <label for="inputScript" class="text-sm font-semibold text-slate-700 uppercase tracking-wider">
-                    Input Script
-                </label>
-                <button onclick="resetFields()" class="text-xs text-red-500 hover:text-red-700 font-medium transition-colors flex items-center gap-1">
-                    <i class="fa-solid fa-trash-can"></i> Reset
-                </button>
+                <label class="text-sm font-semibold text-slate-700 uppercase">Input Script</label>
+                <button onclick="resetFields()" class="text-xs text-red-500 hover:underline">Reset</button>
             </div>
-            <textarea 
-                id="inputScript" 
-                class="w-full h-48 p-4 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-y text-slate-700"
-                placeholder='Paste script HTML/JS Anda di sini...&#10;Contoh: <script type="text/javascript">...</script>'></textarea>
+            <textarea id="inputScript" class="w-full h-48 p-4 bg-slate-50 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Paste script di sini..."></textarea>
         </div>
 
         <div class="flex justify-center">
-            <button onclick="convertScript()" class="group relative inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5">
+            <button onclick="convertScript()" class="px-8 py-3 text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-transform active:scale-95">
                 <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Convert Script
             </button>
         </div>
 
-        <div class="glass-panel rounded-xl p-6 relative border-t-4 border-t-indigo-500">
+        <div class="glass-panel rounded-xl p-6 border-t-4 border-t-indigo-500">
             <div class="flex justify-between items-center mb-4">
-                <label for="outputScript" class="text-sm font-semibold text-slate-700 uppercase tracking-wider">
-                    Hasil Convert
-                </label>
-                <span id="copyFeedback" class="text-xs text-green-600 font-semibold opacity-0 transition-opacity">
-                    <i class="fa-solid fa-check"></i> Tersalin!
-                </span>
+                <label class="text-sm font-semibold text-slate-700 uppercase">Hasil Convert</label>
+                <span id="copyFeedback" class="text-xs text-green-600 opacity-0 transition-opacity">Tersalin!</span>
             </div>
-            
             <div class="relative">
-                <textarea 
-                    id="outputScript" 
-                    readonly
-                    class="w-full h-48 p-4 bg-slate-900 text-green-400 border border-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-y"
-                    placeholder="// Hasil document.write() akan muncul di sini..."></textarea>
-                
-                <button onclick="copyToClipboard()" class="absolute top-3 right-3 bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-md text-sm shadow-md transition-all border border-slate-600 group" title="Copy to Clipboard">
-                    <i class="fa-regular fa-copy group-hover:hidden"></i>
-                    <i class="fa-solid fa-copy hidden group-hover:inline"></i>
+                <textarea id="outputScript" readonly class="w-full h-48 p-4 bg-slate-900 text-green-400 border rounded-lg outline-none"></textarea>
+                <button onclick="copyToClipboard()" class="absolute top-3 right-3 bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-md transition-all">
+                    <i class="fa-regular fa-copy"></i>
                 </button>
             </div>
         </div>
-
-    </div>
-
-    <div class="mt-12 text-center text-sm text-slate-400">
-        <p>&copy; 2024 HTML Tools Converter. Optimized for Ad Networks.</p>
     </div>
 
     <script>
@@ -91,35 +57,32 @@
             const outputArea = document.getElementById('outputScript');
 
             if (!input) {
-                alert("Silakan masukkan script terlebih dahulu!");
+                alert("Masukkan script terlebih dahulu!");
                 return;
             }
 
             let processed = input;
 
-            // 1. Tambahkan type="text/javascript" jika script src belum memilikinya (Sesuai keinginan user)
-            // Ini mencari tag <script src="..."> yang tidak memiliki atribut 'type='
+            // 1. Ubah https:// menjadi //
+            processed = processed.replace(/https:\/\//g, '//');
+
+            // 2. Tambahkan type='text/javascript' jika belum ada (khusus untuk tag script dengan src)
             if (processed.includes('src=') && !processed.toLowerCase().includes('type=')) {
                 processed = processed.replace(/<script/i, '<script type="text/javascript"');
             }
 
-            // 2. Ubah https:// menjadi // (Protocol Relative)
-            processed = processed.replace(/src=["']https:\/\//g, 'src="//');
-            
-            // 3. Escape closing script tags: </script> menjadi <\/script>
+            // 3. Escape closing script tag </script> -> <\/script>
             processed = processed.replace(/<\/script>/gi, '<\\/script>');
 
+            // 4. Proses Akhir berdasarkan baris
             let result = '';
-
-            // 4. Logika Deteksi: Single Line vs Multi Line
             if (input.includes('\n')) {
-                // Mode Multiline: Menggunakan Backticks (`)
-                result = `document.write(\`\n${processed}\n\`);`;
+                // Multi-line menggunakan backticks (`)
+                result = "document.write(`" + processed + "`);";
             } else {
-                // Mode Single Line: Menggunakan Double Quotes (")
-                // Ganti semua tanda kutip dua (") di dalam menjadi kutip satu (')
-                let singleLineProcessed = processed.replace(/"/g, "'");
-                result = `document.write("${singleLineProcessed}");`;
+                // Single-line sesuai permintaan: Gunakan double quote (") di luar, single quote (') di dalam
+                let cleanContent = processed.replace(/"/g, "'");
+                result = `document.write("${cleanContent}");`;
             }
 
             outputArea.value = result;
@@ -128,30 +91,15 @@
         function copyToClipboard() {
             const outputArea = document.getElementById('outputScript');
             if (!outputArea.value) return;
-
-            outputArea.select();
-            outputArea.setSelectionRange(0, 99999); 
-            
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(outputArea.value).then(showCopyFeedback);
-            } else {
-                document.execCommand('copy');
-                showCopyFeedback();
-            }
-        }
-
-        function showCopyFeedback() {
+            navigator.clipboard.writeText(outputArea.value);
             const feedback = document.getElementById('copyFeedback');
             feedback.classList.remove('opacity-0');
-            setTimeout(() => {
-                feedback.classList.add('opacity-0');
-            }, 2000);
+            setTimeout(() => feedback.classList.add('opacity-0'), 2000);
         }
 
         function resetFields() {
             document.getElementById('inputScript').value = '';
             document.getElementById('outputScript').value = '';
-            document.getElementById('inputScript').focus();
         }
     </script>
 </body>
