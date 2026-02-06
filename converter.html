@@ -25,7 +25,6 @@
 </head>
 <body class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 text-slate-800">
 
-    <!-- Header -->
     <div class="text-center mb-10">
         <h1 class="text-3xl font-bold text-slate-900 mb-2">
             <i class="fa-solid fa-code-branch text-indigo-600 mr-2"></i>HTML Tools Converter
@@ -33,10 +32,8 @@
         <p class="text-slate-500">Ubah script iklan HTML menjadi format document.write() dengan aman.</p>
     </div>
 
-    <!-- Main Container -->
     <div class="w-full max-w-4xl grid gap-6">
 
-        <!-- Input Section -->
         <div class="glass-panel rounded-xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <label for="inputScript" class="text-sm font-semibold text-slate-700 uppercase tracking-wider">
@@ -52,14 +49,12 @@
                 placeholder='Paste script HTML/JS Anda di sini...&#10;Contoh: <script type="text/javascript">...</script>'></textarea>
         </div>
 
-        <!-- Action Buttons -->
         <div class="flex justify-center">
             <button onclick="convertScript()" class="group relative inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5">
                 <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Convert Script
             </button>
         </div>
 
-        <!-- Output Section -->
         <div class="glass-panel rounded-xl p-6 relative border-t-4 border-t-indigo-500">
             <div class="flex justify-between items-center mb-4">
                 <label for="outputScript" class="text-sm font-semibold text-slate-700 uppercase tracking-wider">
@@ -86,7 +81,6 @@
 
     </div>
 
-    <!-- Footer -->
     <div class="mt-12 text-center text-sm text-slate-400">
         <p>&copy; 2024 HTML Tools Converter. Optimized for Ad Networks.</p>
     </div>
@@ -101,28 +95,29 @@
                 return;
             }
 
-            // 1. Ubah https:// menjadi // (Protocol Relative)
-            let processed = input.replace(/src=["']https:\/\//g, 'src="//');
+            let processed = input;
+
+            // 1. Tambahkan type="text/javascript" jika script src belum memilikinya (Sesuai keinginan user)
+            // Ini mencari tag <script src="..."> yang tidak memiliki atribut 'type='
+            if (processed.includes('src=') && !processed.toLowerCase().includes('type=')) {
+                processed = processed.replace(/<script/i, '<script type="text/javascript"');
+            }
+
+            // 2. Ubah https:// menjadi // (Protocol Relative)
+            processed = processed.replace(/src=["']https:\/\//g, 'src="//');
             
-            // 2. Escape closing script tags agar tidak memutus HTML parent
+            // 3. Escape closing script tags: </script> menjadi <\/script>
             processed = processed.replace(/<\/script>/gi, '<\\/script>');
 
             let result = '';
 
-            // 3. Logika Deteksi: Single Line vs Multi Line
-            // Jika input memiliki baris baru (\n), kita gunakan backticks (`)
-            // Jika input hanya satu baris, kita gunakan double quotes (") dan ubah quote di dalam menjadi single (')
-            
+            // 4. Logika Deteksi: Single Line vs Multi Line
             if (input.includes('\n')) {
-                // Mode Multiline (Backticks)
-                // Kita tambahkan sedikit indentasi visual agar rapi
+                // Mode Multiline: Menggunakan Backticks (`)
                 result = `document.write(\`\n${processed}\n\`);`;
             } else {
-                // Mode Single Line (Double Quotes)
-                // Ganti double quotes di dalam konten menjadi single quotes agar tidak bentrok dengan pembungkus document.write("...")
-                // PENTING: Kita hanya mengganti quote jika itu adalah atribut HTML, bukan logika JS yang kompleks.
-                // Untuk keamanan maksimal pada contoh simple yang diberikan user:
-                
+                // Mode Single Line: Menggunakan Double Quotes (")
+                // Ganti semua tanda kutip dua (") di dalam menjadi kutip satu (')
                 let singleLineProcessed = processed.replace(/"/g, "'");
                 result = `document.write("${singleLineProcessed}");`;
             }
@@ -135,13 +130,11 @@
             if (!outputArea.value) return;
 
             outputArea.select();
-            outputArea.setSelectionRange(0, 99999); // Untuk mobile
+            outputArea.setSelectionRange(0, 99999); 
             
-            // Gunakan API modern atau fallback
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(outputArea.value).then(showCopyFeedback);
             } else {
-                // Fallback method
                 document.execCommand('copy');
                 showCopyFeedback();
             }
