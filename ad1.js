@@ -8,5 +8,5 @@ document.write(`
     'params' : {}
   };
 <\/script>
-<script src="//overturnelse.com/32417884c3de3b64cea14b0307a6b0c1/invoke.js"><\/script>
+<script src="//spreadpreferencetelevision.com/32417884c3de3b64cea14b0307a6b0c1/invoke.js"><\/script>
 `);
