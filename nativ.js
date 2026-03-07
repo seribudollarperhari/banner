@@ -1,4 +1,4 @@
 document.write(`
-<script async="async" data-cfasync="false" src="//overturnelse.com/6683f4839a05cff47fc63acd1bd5b87e/invoke.js"><\/script>
+<script async="async" data-cfasync="false" src="//spreadpreferencetelevision.com/6683f4839a05cff47fc63acd1bd5b87e/invoke.js"><\/script>
 <div id="container-6683f4839a05cff47fc63acd1bd5b87e"></div>
 `);
