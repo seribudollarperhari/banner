@@ -1,6 +1,17 @@
 document.write(`
 <script>
   atOptions = {
+    'key' : 'a317173734fbcd8901b885b17a227f72',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+<\/script>
+<script src="//spreadpreferencetelevision.com/a317173734fbcd8901b885b17a227f72/invoke.js"><\/script>
+
+<script>
+  atOptions = {
     'key' : '32417884c3de3b64cea14b0307a6b0c1',
     'format' : 'iframe',
     'height' : 250,
