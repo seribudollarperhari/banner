@@ -33,7 +33,7 @@ document.write(`
         });
 })();
 //]]>
-</script>
+<\/script>
 
 <script>
   atOptions = {
