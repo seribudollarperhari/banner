@@ -1,12 +1,12 @@
 document.write(`
 <script>
   atOptions = {
-    'key' : '392fbd37fc20834e2ea77f031022ab0b',
+    'key' : '17ec1465a9a872e687edaaffe04db35f',
     'format' : 'iframe',
     'height' : 250,
     'width' : 300,
     'params' : {}
   };
 <\/script>
-<script src="//spreadpreferencetelevision.com/392fbd37fc20834e2ea77f031022ab0b/invoke.js"><\/script>
+<script src="//www.highrevenueformat.com/17ec1465a9a872e687edaaffe04db35f/invoke.js"><\/script>
 `);
