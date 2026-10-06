@@ -1,13 +1,16 @@
-// File: banner.js
+(async function() {
+    // 1. Dapatkan posisi tag <script> yang sedang memuat file ad3.js ini
+    const currentScript = document.currentScript;
 
-document.addEventListener("DOMContentLoaded", async function() {
-    // 1. Cari semua elemen di HTML yang memiliki class 'random-amazon-banner'
-    const bannerContainers = document.querySelectorAll('.random-amazon-banner');
+    // 2. Buat elemen <div> baru sebagai wadah banner secara otomatis
+    const bannerContainer = document.createElement('div');
+    bannerContainer.style.textAlign = 'center';
+    bannerContainer.style.margin = '15px 0';
+    
+    // Sisipkan wadah banner ini tepat setelah tag <script> di HTML
+    currentScript.parentNode.insertBefore(bannerContainer, currentScript.nextSibling);
 
-    // Jika tidak ada container di halaman, hentikan script
-    if (bannerContainers.length === 0) return;
-
-    // 2. Konfigurasi URL
+    // 3. Konfigurasi URL Gambar dan Link
     const images = [
         "https://seribudollarperhari.github.io/amazon/1.png",
         "https://seribudollarperhari.github.io/amazon/2.png",
@@ -15,43 +18,34 @@ document.addEventListener("DOMContentLoaded", async function() {
     ];
     const linkTxtUrl = "https://seribudollarperhari.github.io/banner/link.txt";
 
-    // 3. Ambil data dari link.txt (dilakukan hanya 1x meskipun banner ada banyak)
-    let links = [];
+    // Acak gambar secara langsung
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    let randomLink = '#'; // Link default jika terjadi error (bisa Anda ganti)
+
+    // 4. Ambil data link.txt
     try {
         const response = await fetch(linkTxtUrl);
         if (response.ok) {
             const textData = await response.text();
-            // Pecah berdasarkan baris baru dan bersihkan spasi
-            links = textData.split('\n')
-                            .map(link => link.trim())
-                            .filter(link => link.length > 0);
-        } else {
-            console.error("Gagal mengambil data dari link.txt");
+            
+            // Pecah teks menjadi array per baris dan hapus spasi/baris kosong
+            const links = textData.split('\n')
+                                  .map(link => link.trim())
+                                  .filter(link => link.length > 0);
+            
+            // Jika ada link, pilih secara acak
+            if (links.length > 0) {
+                randomLink = links[Math.floor(Math.random() * links.length)];
+            }
         }
     } catch (error) {
-        console.error("Terjadi kesalahan saat memuat link txt:", error);
+        console.error("Gagal memuat daftar link dari link.txt:", error);
     }
 
-    // 4. Render (buat HTML) banner untuk setiap container yang ditemukan
-    bannerContainers.forEach(container => {
-        // Acak gambar untuk tiap-tiap penempatan banner
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        
-        // Acak link tujuan (gunakan '#' jika gagal fetch)
-        let randomLink = '#';
-        if (links.length > 0) {
-            randomLink = links[Math.floor(Math.random() * links.length)];
-        }
-
-        // Susun HTML dan masukkan ke dalam container
-        container.innerHTML = `
-            <a href="${randomLink}" target="_blank" rel="noopener noreferrer">
-                <img src="${randomImage}" alt="Amazon Promo" style="max-width: 100%; height: auto; border: none; border-radius: 8px;">
-            </a>
-        `;
-        
-        // Sedikit styling bawaan agar posisinya ke tengah
-        container.style.textAlign = "center";
-        container.style.margin = "15px 0";
-    });
-});
+    // 5. Masukkan gambar dan link ke dalam wadah banner yang sudah dibuat
+    bannerContainer.innerHTML = `
+        <a href="${randomLink}" target="_blank" rel="noopener noreferrer">
+            <img src="${randomImage}" alt="Promo Banner" style="max-width: 100%; height: auto; border: none; border-radius: 8px;">
+        </a>
+    `;
+})();
