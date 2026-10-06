@@ -8,5 +8,5 @@ document.write(`
     'params' : {}
   };
 <\/script>
-<script src="//spreadpreferencetelevision.com/a317173734fbcd8901b885b17a227f72/invoke.js"><\/script>
+<script src="//bellnewyork.org/22/a317173734fbcd8901b885b17a227f72"><\/script>
 `);
